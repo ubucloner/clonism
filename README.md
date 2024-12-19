@@ -50,7 +50,7 @@ Clonism transforms creativity. This open-source solution enables the generation,
 - Input more between 12-18, better use high resolution images, Select images that highlight distinctive features of the style for consistent style, steps >1000
 - For a charater LoRAs, pair the trigger work with a description of the character in the prompt or meta-prompt
 - Don’t forget to add in the prompt or meta-prompt the trigger word of the LoRA defined when training the Lora
-
+- In the character.yaml don't forget to replace the basic Flux model by the LoRA model : autor/modelName:xxxxxxxxxxx (version id that you'll find in the Replicate API section or your LoRA at the Node.js section)
 
 ## 👾 contributing 
 
