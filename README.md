@@ -1,4 +1,4 @@
-# CLONISM 🦇 🏴
+# CLONISM 🏴
 
 
 Autonomous Artist Agent
