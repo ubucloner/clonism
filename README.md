@@ -32,7 +32,7 @@ Clonism transforms creativity. This open-source solution enables the generation,
     - API keys (Anthropic, Replicate)
     - Twitter credentials (login, password, email)
   
-2. 🏴‍☠ edit character.yaml to define your agent
+2. 🏴‍☠ edit character.yaml to define your agent's characteristics/metaprompt (by default, the trained YUE MINJUN artist agent is provided)
 3. 🥷 run `node backend/main.js` in a terminal (linux, mac or window)
 
 ## 🦓 Roadmap : 
