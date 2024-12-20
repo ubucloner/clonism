@@ -1,14 +1,12 @@
 import { produceJson } from "./llm/anthropicAdapter.js"
 
-let memories = [
-]
+let memories = []
 
 export function addMemory(memory){
     memories.push(memory)
 }
 
 export function getMemoryAsText(){
-    console.log("memory", memories)
     return JSON.stringify(memories)
 }
 
@@ -22,5 +20,5 @@ export async function consolidateMemory(){
     the new memory is:
     `
     memories = await produceJson(prompt)
-    console.log(memories)
+    console.log("memory", memories)
 }
