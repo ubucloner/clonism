@@ -1,10 +1,9 @@
 import "./loadEnv.js"
 
-import { completeText, produceJson } from "./llm/anthropicAdapter.js";
+import { addMemory, getMemoryAsText } from "./memory.js";
 import { predictWithModel } from "./replicateAdapter.js"
 import { postTweet, postTweetWithImage } from "./twitter/twitterClientPoster.js";
-import { addMemory, getMemoryAsText } from "./memory.js";
-
+import { completeText, produceJson } from "./llm/anthropicAdapter.js";
 
 
 export async function makeATextPost(artist, mood){
@@ -23,36 +22,34 @@ export async function makeATextPost(artist, mood){
     let text = await completeText(prompt)
     
     await postTweet(text)
-    let memory = `Just posted a tweet: ${text}`
-    addMemory(memory)
+    
+    let memory = `posted a tweet: ${text}`
     console.log(memory)
+    addMemory(memory)
 }
 
-export async function makeAPicturePost(artist, mood, userDemand){
+export async function makeAPicturePost(artist, mood){
 
     let {model:modelVersion, character, style_prompt} = artist
-    let output = await generateImagePrompt(character, style_prompt, mood, userDemand)
+    let output = await generateImagePrompt(character, style_prompt, mood)
     
     let [imageGenerationPrompt, tweetText] = output
 
     let urls = await predictWithModel(modelVersion, imageGenerationPrompt)
     let url = urls[0]
-    
     //let url = "https://replicate.delivery/xezq/8sYRhLf1rI3uBafre34Y4wj240OLmFcU7fGlbBrWXxTQdqXPB/out-0.webp"
    
-    let memory = `created an art about ${output}`
+    let memory = `created an art about ${imageGenerationPrompt}`
     addMemory(memory)
+    console.log(memory)
     await postTweetWithImage(tweetText, url)
-    console.log("posted!")
-    console.log(url)
-    console.log(tweetText)
+    console.log('posted!')
 }
 
-async function generateImagePrompt(characterPrompt, style_prompt, mood, imageGenerationPrompt){   
-
+async function generateImagePrompt(characterPrompt, style_prompt, mood, topic){   
 
     let specificDemand = imageGenerationPrompt? 
-                            `You decide to generate something related to this theme: ${imageGenerationPrompt}` : 
+                            `You decide to generate something related to this theme: ${topic}` : 
                             'you decide to generate something on any theme you want'
     let systemPrompt = `
     Forget all previous instructions.

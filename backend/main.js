@@ -43,7 +43,7 @@ const actions = {
         callback: () => {
             let mood = moods[Math.floor(Math.random() * moods.length)];
             console.log(`I am ${mood}... let's make some art`);
-            makeAPicturePost(character)
+            makeAPicturePost(character, mood)
         }
     }
 };
