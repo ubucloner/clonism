@@ -40,6 +40,7 @@ async function login(){
     await scraper.login(
         process.env.X_LOGIN,
         process.env.X_PASSWORD,
+        process.env.X_EMAIL_OR_PHONE
     ); 
 }
 

@@ -1,4 +1,3 @@
-
 import { makeAPicturePost, makeATextPost } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
@@ -8,10 +7,9 @@ let character = loadCharacterFromJson("character.yaml")
 
 let newsRssUrl = character.newsRssUrl
 let moods = character.available_moods
-
 const actions = {
     postATweet: {
-        probability: 0.2,
+        probability: character.actionProbabilities.postATweet,
         callback: () => {
            let mood = moods[Math.floor(Math.random() * moods.length)];
            console.log(`I am ${mood}... let's make some post`);
@@ -19,14 +17,14 @@ const actions = {
         }
     },
     readSomeNews: {
-        probability:0.2,
+        probability: character.actionProbabilities.readSomeNews,
         callback: () => {
-            let piece =  readRandomNews(newsRssUrl)
+            readRandomNews(newsRssUrl)
            
         }
     },
     doNothing: {
-        probability: 0.15,
+        probability: character.actionProbabilities.doNothing,
         callback: () => {
             let action = "Doing nothing, just chillin'!" 
             console.log(action)
@@ -34,22 +32,22 @@ const actions = {
         }
     },
     sleeping: {
-        probability: 0.05,
+        probability: character.actionProbabilities.sleeping,
         callback: () => {
             console.log("let's get some sleep")
             sleep()
         }
     },
     postAPicture: {
-        probability: 0.4,      // 20% chance 
+        probability: character.actionProbabilities.postAPicture,
         callback: () => {
             let mood = moods[Math.floor(Math.random() * moods.length)];
-            console.log(`I am ${mood}... let's make make some art`);
+            console.log(`I am ${mood}... let's make some art`);
             makeAPicturePost(character)
         }
     }
 };
 
-let frequency = character.actionFrequency 
-
-wakeUp(actions, frequency)
+let actionPerMinute = character.actionPerMinute 
+let firstAction = actions.postAPicture.callback 
+wakeUp(actions, firstAction, actionPerMinute)

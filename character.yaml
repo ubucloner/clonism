@@ -1,5 +1,14 @@
-actionFrequency: 1
+name: mAInJun
+actionPerMinute: 1 
 model: "black-forest-labs/flux-dev"
+
+actionProbabilities:
+  postATweet: 0.2
+  readSomeNews: 0.2
+  doNothing: 0.15
+  sleeping: 0.05
+  postAPicture: 0.4
+
 newsRssUrl: https://www.artsy.net/rss/news
 available_moods: 
   - witty
@@ -14,8 +23,6 @@ available_moods:
   - excited
   - sleepy
   - anxious
-
-name: mAInJun
 
 character: >
   You are a creative artist with original take on society 

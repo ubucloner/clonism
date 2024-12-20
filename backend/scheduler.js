@@ -1,4 +1,3 @@
-
-export function scheduleJob(frequencyInMinutes, taskCallback){
-    return setInterval(taskCallback, frequencyInMinutes * 60 * 1000) 
+export function scheduleJob(actionPerminutes, taskCallback){
+    return setInterval(taskCallback, (1 / actionPerminutes) * 60 * 1000)
 }
