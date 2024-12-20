@@ -1,7 +1,7 @@
 import "./loadEnv.js"
 
 import { addMemory, getMemoryAsText } from "./memory.js";
-import { predictWithModel } from "./replicateAdapter.js"
+import { generateImage } from "./replicateAdapter.js"
 import { postTweet, postTweetWithImage } from "./twitter/twitterClientPoster.js";
 import { completeText, produceJson } from "./llm/anthropicAdapter.js";
 
@@ -35,20 +35,23 @@ export async function makeAPicturePost(artist, mood){
     
     let [imageGenerationPrompt, tweetText] = output
 
-    let urls = await predictWithModel(modelVersion, imageGenerationPrompt)
-    let url = urls[0]
-    //let url = "https://replicate.delivery/xezq/8sYRhLf1rI3uBafre34Y4wj240OLmFcU7fGlbBrWXxTQdqXPB/out-0.webp"
-   
-    let memory = `created an art about ${imageGenerationPrompt}`
-    addMemory(memory)
-    console.log(memory)
-    await postTweetWithImage(tweetText, url)
-    console.log('posted!')
+    try {
+        let urls = await generateImage(modelVersion, imageGenerationPrompt)
+        let url = urls[0]
+        
+        let memory = `created an art about ${imageGenerationPrompt}`
+        addMemory(memory)
+        console.log(memory)
+        await postTweetWithImage(tweetText, url)
+        console.log('posted!')
+    } catch (error) {
+        console.error('Alas, I did not have enough inspiration to complete the painting')
+    }
 }
 
 async function generateImagePrompt(characterPrompt, style_prompt, mood, topic){   
 
-    let specificDemand = imageGenerationPrompt? 
+    let specificDemand = topic? 
                             `You decide to generate something related to this theme: ${topic}` : 
                             'you decide to generate something on any theme you want'
     let systemPrompt = `

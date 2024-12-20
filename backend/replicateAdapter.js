@@ -10,7 +10,7 @@ const replicate = new Replicate({
 /**
  * return image urls (hosted on replicate)
  */
-export async function predictWithModel(modelVersion, prompt, imageFilePath){
+export async function generateImage(modelVersion, prompt, imageFilePath){
 
   let payload = {
     input: {
