@@ -27,7 +27,6 @@ export async function makeATextPost(artist, mood){
     console.log(memory)
     addMemory(memory)
 }
-
 export async function makeAPicturePost(artist, mood){
 
     let {model:modelVersion, character, style_prompt} = artist
@@ -35,18 +34,21 @@ export async function makeAPicturePost(artist, mood){
     
     let [imageGenerationPrompt, tweetText] = output
 
+    let urls;
     try {
-        let urls = await generateImage(modelVersion, imageGenerationPrompt)
-        let url = urls[0]
-        
-        let memory = `created an art about ${imageGenerationPrompt}`
-        addMemory(memory)
-        console.log(memory)
-        await postTweetWithImage(tweetText, url)
-        console.log('posted!')
+        urls = await generateImage(modelVersion, imageGenerationPrompt)
     } catch (error) {
         console.error('Alas, I did not have enough inspiration to complete the painting')
+        return;
     }
+
+    let url = urls[0]
+    
+    let memory = `created an art about ${imageGenerationPrompt}`
+    addMemory(memory)
+    console.log(memory)
+    await postTweetWithImage(tweetText, url)
+    console.log('posted!')
 }
 
 async function generateImagePrompt(characterPrompt, style_prompt, mood, topic){   
