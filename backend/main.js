@@ -1,9 +1,9 @@
-import { makeAPicturePost, makeATextPost } from "./makeAPost.js";
+import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
 import { addMemory } from "./memory.js";
 
-let character = loadCharacterFromJson("character.yaml")
+let character = loadCharacterFromJson("fucktard.character.yaml")
 
 let newsRssUrl = character.newsRssUrl
 let moods = character.available_moods
@@ -14,6 +14,14 @@ const actions = {
            let mood = moods[Math.floor(Math.random() * moods.length)];
            console.log(`I am ${mood}... let's make some post`);
            makeATextPost(character, mood)
+        }
+    },
+    postATrendTweet: {
+        probability: character.actionProbabilities.postATrendTweet,
+        callback: () => {
+           let mood = moods[Math.floor(Math.random() * moods.length)];
+           console.log(`I am ${mood}... let's make some post`);
+           makeATrendPost(character, mood)
         }
     },
     readSomeNews: {
@@ -45,9 +53,17 @@ const actions = {
             console.log(`I am ${mood}... let's make some art`);
             makeAPicturePost(character, mood)
         }
+    },
+    postATrendPicture: {
+        probability: character.actionProbabilities.postATrendPicture,
+        callback: () => {
+            let mood = moods[Math.floor(Math.random() * moods.length)];
+            console.log(`I am ${mood}... let's make some art`);
+            makeATrendPicturePost(character, mood)
+        }
     }
 };
 
 let actionPerMinute = character.actionPerMinute 
-let firstAction = actions.postAPicture.callback 
+let firstAction = actions.postATweet.callback
 wakeUp(actions, firstAction, actionPerMinute)

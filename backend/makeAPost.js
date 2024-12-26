@@ -2,7 +2,7 @@ import "./loadEnv.js"
 
 import { addMemory, getMemoryAsText } from "./memory.js";
 import { generateImage } from "./replicateAdapter.js"
-import { postTweet, postTweetWithImage } from "./twitter/twitterClientPoster.js";
+import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets } from "./twitter/twitterClientPoster.js";
 import { completeText, produceJson } from "./llm/anthropicAdapter.js";
 
 
@@ -27,6 +27,29 @@ export async function makeATextPost(artist, mood){
     console.log(memory)
     addMemory(memory)
 }
+
+export async function makeATrendPost(artist, mood){
+    const { trend, tweets } = await getRandomTrendAndBestTweets();
+
+    let {character} = artist
+    let prompt = `
+    pretend to be ${character}
+    your memory is ${getMemoryAsText()}
+    you are feeling ${mood} right now
+    make a short tweet (less than 30 words) that reflects your current mood about anything that comes to your mind
+    It should be about ${trend}, you can use the following examples to inspire you: ${tweets}
+    Do not make any other comment just provide the tweet
+    the tweet is:
+    `
+    let text = await completeText(prompt)
+
+    await postTweet(text)
+
+    let memory = `posted a trend tweet: ${text}`
+    console.log(memory)
+    addMemory(memory)
+}
+
 export async function makeAPicturePost(artist, mood){
 
     let {model:modelVersion, character, style_prompt} = artist
@@ -44,6 +67,31 @@ export async function makeAPicturePost(artist, mood){
 
     let url = urls[0]
     
+    let memory = `created an art about ${imageGenerationPrompt}`
+    addMemory(memory)
+    console.log(memory)
+    await postTweetWithImage(tweetText, url)
+    console.log('posted!')
+}
+
+export async function makeATrendPicturePost(artist, mood){
+    const { trend } = await getRandomTrendAndBestTweets();
+
+    let {model:modelVersion, character, style_prompt} = artist
+    let output = await generateImagePrompt(character, style_prompt, mood, trend)
+
+    let [imageGenerationPrompt, tweetText] = output
+
+    let urls;
+    try {
+        urls = await generateImage(modelVersion, imageGenerationPrompt)
+    } catch (error) {
+        console.error('Alas, I did not have enough inspiration to complete the painting')
+        return;
+    }
+
+    let url = urls[0]
+
     let memory = `created an art about ${imageGenerationPrompt}`
     addMemory(memory)
     console.log(memory)
