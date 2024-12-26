@@ -3,7 +3,7 @@ import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
 import { addMemory } from "./memory.js";
 
-let character = loadCharacterFromJson("fucktard.character.yaml")
+let character = loadCharacterFromJson("character.yaml")
 
 let newsRssUrl = character.newsRssUrl
 let moods = character.available_moods
@@ -65,5 +65,5 @@ const actions = {
 };
 
 let actionPerMinute = character.actionPerMinute 
-let firstAction = actions.postATweet.callback
+let firstAction = actions.postAPicture.callback
 wakeUp(actions, firstAction, actionPerMinute)
