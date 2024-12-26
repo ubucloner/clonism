@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import path from 'path';
+import crypto from 'crypto';
 
 
 import { fileURLToPath } from 'url';
