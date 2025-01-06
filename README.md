@@ -34,6 +34,10 @@ Clonism transforms creativity. This open-source solution enables the generation,
   
 2. 🏴‍☠ edit character.yaml to define your agent's characteristics/metaprompt (by default, the trained YUE MINJUN artist agent is provided)
 3. 🥷 run `node backend/main.js` in a terminal (linux, mac or window)
+4. optional: load initial memory in the agent (less than 150k characters): 
+    1. fill initialMemory.sample.json,
+    2. rename it an
+    3. uncomment character.yaml 'initialMemoryJsonPath' entry
 
 ## 🦓 Roadmap : 
 - save consolidated memory in an append only long_memory file

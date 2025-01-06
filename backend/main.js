@@ -1,7 +1,7 @@
 import { makeAPicturePost, makeATextPost } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
-import { addMemory } from "./memory.js";
+import { addMemory, loadMemoryFromJson } from "./memory.js";
 
 let character = loadCharacterFromJson("character.yaml")
 
@@ -50,4 +50,9 @@ const actions = {
 
 let actionPerMinute = character.actionPerMinute 
 let firstAction = actions.postAPicture.callback 
+
+if (character.initialMemoryJsonPath){
+    loadMemoryFromJson(character.initialMemoryJsonPath)
+}
+
 wakeUp(actions, firstAction, actionPerMinute)

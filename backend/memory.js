@@ -1,5 +1,9 @@
 import { produceJson } from "./llm/anthropicAdapter.js"
+import fs from "fs"
 
+/**
+ * @var string[]
+ */
 let memories = []
 
 export function addMemory(memory){
@@ -21,4 +25,18 @@ export async function consolidateMemory(){
     `
     memories = await produceJson(prompt)
     console.log("memory", memories)
+}
+
+/**
+ * The file should not be too big (roughly max 150k caracters) 
+ */
+export function loadMemoryFromJson(path) {
+    if (!fs.existsSync(path)) {
+        console.log(`memory file ${path} does not exist, skipping`)
+
+        return 
+    }
+    const data = fs.readFileSync(path, 'utf8');
+    memories = JSON.parse(data);
+    console.log("memory file loaded!")
 }

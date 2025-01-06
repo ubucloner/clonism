@@ -1,6 +1,6 @@
 name: mAInJun
 actionPerMinute: 1 
-model: "black-forest-labs/flux-dev"
+model: skoundar/fcktard:ad809a540a7abc2688b565a8b99ce94dc9c38746d95390e7a2749eda6592a32f
 
 actionProbabilities:
   postATweet: 0.2
@@ -8,6 +8,12 @@ actionProbabilities:
   doNothing: 0.15
   sleeping: 0.05
   postAPicture: 0.4
+
+#uncomment if you want to load a memory from json at start
+#file should not be too big (max 150 character)
+#cf initialMemory.sample.json 
+# rename it !
+#initialMemoryJsonPath: initialMemory.json 
 
 newsRssUrl: https://www.artsy.net/rss/news
 available_moods: 
