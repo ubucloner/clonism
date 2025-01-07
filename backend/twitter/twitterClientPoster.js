@@ -16,7 +16,12 @@ async function loginIfNeeded(){
     await scraper.login(
         process.env.X_LOGIN,
         process.env.X_PASSWORD,
-        process.env.X_EMAIL_OR_PHONE
+        undefined,
+        undefined,
+        process.env.TWITTER_API_KEY,
+        process.env.TWITTER_API_SECRET_KEY,
+        process.env.TWITTER_ACCESS_TOKEN,
+        process.env.TWITTER_ACCESS_TOKEN_SECRET
     );
 }
 
@@ -92,8 +97,14 @@ export async function createPoll() {
               { label: 'Mint 🤖' },
               { label: 'Airdrop 💸' },
             ],
-            durationMinutes: 1440,
+            duration_minutes: 1440,
           },
         },
     );
+}
+
+export async function closePoll() {
+    await loginIfNeeded();
+
+    //TODO: Fetch tweets from last tweet and filter which one was the poll
 }

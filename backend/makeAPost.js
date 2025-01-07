@@ -2,7 +2,7 @@ import "./loadEnv.js"
 
 import { addMemory, getMemoryAsText } from "./memory.js";
 import { generateImage } from "./replicateAdapter.js"
-import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll } from "./twitter/twitterClientPoster.js";
+import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll, closePoll } from "./twitter/twitterClientPoster.js";
 import { completeText, produceJson } from "./llm/anthropicAdapter.js";
 
 const interestingThemes = [{
@@ -152,5 +152,5 @@ export async function replyToMentions(artist, tweet) {
 
 
     // temp
-    await createPoll();
+    await closePoll();
 }
