@@ -6,6 +6,7 @@ import { downloadImage } from "../utils.js";
 
 
 const scraper = new Scraper();
+const username = 'FcktardAI';
 
 async function loginIfNeeded(){
 
@@ -52,4 +53,47 @@ export async function getRandomTrendAndBestTweets() {
     const tweets = tweetsData.tweets?.map(tweetData => tweetData.text);
 
     return { trend, tweets };
+}
+
+export async function getLastMentions() {
+    const minimumFollowersToReply = 800;
+    await loginIfNeeded();
+
+    const lastMentions = await scraper.searchTweets(`@${username} -is:retweet -is:reply`, 50);
+
+    const lastMentionsData = [];
+    const usersToReplies = new Set();
+    for await (const lastMention of lastMentions) {
+        const isMention = lastMention.mentions?.find(mention => mention?.username === username);
+        if (!isMention) continue;
+
+        if (usersToReplies.has(lastMention.username)) continue;
+        
+        const user = await scraper.getProfile(lastMention.username);
+        usersToReplies.add(user.username);
+
+        if (user.followersCount < minimumFollowersToReply) continue;
+
+        lastMentionsData.push(lastMention);
+    }
+
+    return lastMentionsData;
+}
+
+export async function createPoll() {
+    await loginIfNeeded();
+
+    await scraper.sendTweetV2(
+        `Mint or Airdrop`,
+        undefined,
+        {
+          poll: {
+            options: [
+              { label: 'Mint 🤖' },
+              { label: 'Airdrop 💸' },
+            ],
+            durationMinutes: 1440,
+          },
+        },
+    );
 }

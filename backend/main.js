@@ -1,4 +1,4 @@
-import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost } from "./makeAPost.js";
+import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost, replyToMentions } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
 import { addMemory } from "./memory.js";
@@ -61,9 +61,18 @@ const actions = {
             console.log(`I am ${mood}... let's make some art`);
             makeATrendPicturePost(character, mood)
         }
-    }
+    },
+    replyToMentions: {
+        probability: character.actionProbabilities.replyToMentions,
+        callback: () => {
+           let mood = moods[Math.floor(Math.random() * moods.length)];
+           console.log(`I am ${mood}... let's make some post`);
+           replyToMentions(character, mood)
+        }
+    },
 };
 
 let actionPerMinute = character.actionPerMinute 
-let firstAction = actions.postAPicture.callback
+// let firstAction = actions.postATweet.callback
+let firstAction = actions.replyToMentions.callback
 wakeUp(actions, firstAction, actionPerMinute)

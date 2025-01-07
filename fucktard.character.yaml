@@ -1,6 +1,6 @@
 name: FCKTARDAI
 actionPerMinute: 1 
-model: "ubucloner/fcktard:ca2d3fcbbb1ef323ce8cc89e1725af3cd32e9facbe4e52559a1bcad2ef139a29"
+model: "skoundar/fcktard:ad809a540a7abc2688b565a8b99ce94dc9c38746d95390e7a2749eda6592a32f"
 
 actionProbabilities:
   postATweet: 0
