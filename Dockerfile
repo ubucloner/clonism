@@ -1,26 +1,20 @@
 # Use Node.js 20.18.1 as the base image
 FROM node:20.18.1
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker caching
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install all dependencies (including devDependencies)
-RUN npm install
+# Install only production dependencies
+RUN npm install --omit=dev
 
 # Copy the rest of the application files
 COPY . .
 
-# Build the Vite frontend
-RUN npm run build
-
-# Remove devDependencies to reduce image size
-RUN npm prune --omit=dev
-
-# Expose the port your Express server listens on
+# Expose the port your Express server uses
 EXPOSE 3000
 
-# Start the backend server (Express)
+# Start the server
 CMD ["node", "backend/main.js"]
