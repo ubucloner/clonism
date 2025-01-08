@@ -13,6 +13,15 @@ async function loginIfNeeded(){
     const isLoggedIn = await scraper.isLoggedIn();
     if (isLoggedIn) return;
 
+    console.log('Logging in...');
+    console.log(1, process.env.X_LOGIN,
+        process.env.X_PASSWORD,
+        undefined,
+        undefined,
+        process.env.TWITTER_API_KEY,
+        process.env.TWITTER_API_SECRET_KEY,
+        process.env.TWITTER_ACCESS_TOKEN,
+        process.env.TWITTER_ACCESS_TOKEN_SECRET);
     await scraper.login(
         process.env.X_LOGIN,
         process.env.X_PASSWORD,
@@ -28,6 +37,7 @@ async function loginIfNeeded(){
 export async function postTweet(text){
     await loginIfNeeded(scraper);
 
+    console.log(2, text);
     await scraper.sendTweet(text);
 }
 
