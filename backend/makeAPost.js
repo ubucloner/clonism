@@ -26,6 +26,7 @@ export async function makeATextPost(artist, mood){
     `
     let text = await completeText(prompt)
     
+    console.log(0, text);
     await postTweet(text)
     
     let memory = `posted a tweet: ${text}`
