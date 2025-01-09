@@ -67,7 +67,7 @@ export async function makeAPicturePost(artist, mood){
     try {
         urls = await generateImage(modelVersion, imageGenerationPrompt)
     } catch (error) {
-        console.error('Alas, I did not have enough inspiration to complete the painting')
+        console.error('Alas, I did not have enough inspiration to complete the painting', error)
         return;
     }
 
