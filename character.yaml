@@ -3,13 +3,21 @@ actionPerMinute: 1
 model: "skoundar/fcktard:ad809a540a7abc2688b565a8b99ce94dc9c38746d95390e7a2749eda6592a32f"
 
 actionProbabilities:
-  postATweet: 0.4
-  postATrendTweet: 0.2
-  readSomeNews: 0.025
-  doNothing: 0.025
-  sleeping: 0.05
-  postAPicture: 0.25
-  postATrendPicture: 0.05
+  postATweet: 0
+  postATrendTweet: 0
+  readSomeNews: 0
+  doNothing: 0
+  sleeping: 0
+  postAPicture: 1
+  postATrendPicture: 0
+  replyToMentions: 0
+  # postATweet: 0.4
+  # postATrendTweet: 0.2
+  # readSomeNews: 0.025
+  # doNothing: 0.025
+  # sleeping: 0.05
+  # postAPicture: 0.25
+  # postATrendPicture: 0.05
   # replyToMentions: 0
 
 newsRssUrl: https://www.artsy.net/rss/news

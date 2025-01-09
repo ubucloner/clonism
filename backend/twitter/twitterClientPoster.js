@@ -14,14 +14,7 @@ async function loginIfNeeded(){
     if (isLoggedIn) return;
 
     console.log('Logging in...');
-    console.log(1, process.env.X_LOGIN,
-        process.env.X_PASSWORD,
-        undefined,
-        undefined,
-        process.env.TWITTER_API_KEY,
-        process.env.TWITTER_API_SECRET_KEY,
-        process.env.TWITTER_ACCESS_TOKEN,
-        process.env.TWITTER_ACCESS_TOKEN_SECRET);
+
     await scraper.login(
         process.env.X_LOGIN,
         process.env.X_PASSWORD,
