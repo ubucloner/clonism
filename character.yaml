@@ -3,12 +3,12 @@ actionPerMinute: 1
 model: "ubucloner/fcktard:ca2d3fcbbb1ef323ce8cc89e1725af3cd32e9facbe4e52559a1bcad2ef139a29"
 
 actionProbabilities:
-  postATweet: 0
+  postATweet: 1
   postATrendTweet: 0
   readSomeNews: 0
   doNothing: 0
   sleeping: 0
-  postAPicture: 1
+  postAPicture: 0
   postATrendPicture: 0
   replyToMentions: 0
   # postATweet: 0.4
