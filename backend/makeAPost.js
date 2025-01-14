@@ -2,8 +2,9 @@ import "./loadEnv.js"
 
 import { addMemory, getMemoryAsText } from "./memory.js";
 import { generateImage } from "./replicateAdapter.js"
-import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll, closePoll } from "./twitter/twitterClientPoster.js";
+import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll, closePoll, replyToTweet } from "./twitter/twitterClientPoster.js";
 import { completeText, produceJson } from "./llm/anthropicAdapter.js";
+import { getBestMentionToReply } from "./utils.js";
 
 const interestingThemes = [{
     nftCollections: ['BoredApeYachtClub', 'CryptoPunks', 'Azuki', 'Moonbirds', 'MutantApeYachtClub', 'Doodles', 'WorldOfWomen', 'PudgyPenguins', 'ArtBlocks', 'Rarible', 'CoolCats', 'VeeFriends', 'Meebits', 'InvisibleFriends', 'Goblintown', 'Mfer', 'ChromieSquiggle', 'Otherdeed', 'Loot', 'CyberKongz', 'Hashmasks', 'FlufWorld', 'TheSandbox', 'Decentraland', 'AxieInfinity', 'RugRadio', 'DeadFellaz', 'KumoX', 'KanpaiPandas'],
@@ -20,10 +21,10 @@ export async function makeATextPost(artist, mood){
     you are feeling ${mood} right now
     make a short tweet (less than 30 words) that reflects your current mood about anything that comes to your mind
     It can be about any topic like life, art, small talk, actuality, reflecting on your past experiences or what you 
-    learned recently 
+    learned recently
     Do not make any other comment just provide the tweet
     the tweet is:
-    `
+    `;
     let text = await completeText(prompt)
     
     await postTweet(text)
@@ -146,11 +147,29 @@ async function generateImagePrompt(characterPrompt, style_prompt, mood, topic){
     return JSON.parse(result)
 }
 
-export async function replyToMentions(artist, tweet) {
-    // const lastMentions = await getLastMentions();
-    // Think about context
+export async function replyToMentions(artist, mood) {
+    const lastMentions = await getLastMentions();
+    const {conversationId, text} = getBestMentionToReply(lastMentions);
 
+    if (!conversationId || !text) {
+        return await makeATextPost(artist, mood);
+    }
 
-    // temp
-    // await closePoll();
+    let {character} = artist
+    let prompt = `
+    pretend to be ${character}
+    your memory is ${getMemoryAsText()}
+    make a short tweet (less than 30 words) in answer to this tweet: "${text}"
+    Your tweet needs to be relevant to the tweet you are replying to.
+    Do not make any other comment just provide the tweet answer
+    the tweet answer is:
+    `;
+    let tweetReply = await completeText(prompt)
+    
+    await replyToTweet(tweetReply, conversationId)
+    
+    let memory = `posted a reply to a tweet: ${tweetReply}`
+    console.log(memory)
+    addMemory(memory)
 }
+// await closePoll();

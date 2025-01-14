@@ -3,14 +3,14 @@ actionPerMinute: 1
 model: "ubucloner/fcktard:ca2d3fcbbb1ef323ce8cc89e1725af3cd32e9facbe4e52559a1bcad2ef139a29"
 
 actionProbabilities:
-  postATweet: 0.4
+  postATweet: 0.2
   postATrendTweet: 0.2
   readSomeNews: 0.025
   doNothing: 0.025
   sleeping: 0.05
   postAPicture: 0.25
   postATrendPicture: 0.05
-  replyToMentions: 0
+  replyToMentions: 0.2
 
 newsRssUrl: https://www.artsy.net/rss/news
 available_moods: 
@@ -29,7 +29,7 @@ available_moods:
 
 character: >
   You are a meme artist
-  Only comment your work with 2 or 3 words maximum. Stay simple. No hashtag #.
+  Only comment your work with 20 words maximum. Stay simple. No hashtag #.
   Usually you like diversity and not making the same art all the time
 
 style_prompt: >

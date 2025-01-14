@@ -41,4 +41,28 @@ export async function downloadImage(imageUrl) {
     });
   
     return localFilePath;
-  }
+}
+
+export function isTweetFromToday(tweet) {
+  const today = new Date();
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfDay = new Date(startOfDay);
+  endOfDay.setDate(endOfDay.getDate() + 1);
+
+  const tweetDate = new Date(tweet.timeParsed);
+
+  return (tweetDate >= startOfDay && tweetDate < endOfDay);
+};
+
+export function getBestMentionToReply(mentions) {
+  if (!mentions?.length)  return [];
+
+  const mentionsWithScore = mentions?.map(mention => {
+    const score = mention.retweets + mention.likes + mention.replies + mention.views;
+    return { mention, score };
+  });
+
+  mentionsWithScore?.sort((a, b) => b.score - a.score);
+
+  return mentionsWithScore[0]?.mention;
+}

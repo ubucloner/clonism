@@ -2,11 +2,11 @@
 import fs from "fs"
 import { Scraper, SearchMode } from 'agent-twitter-client';
 import "../loadEnv.js"
-import { downloadImage } from "../utils.js";
+import { downloadImage, isTweetFromToday } from "../utils.js";
 
 
 const scraper = new Scraper();
-const username = 'FcktardAI';
+const username = 'crypto_yohann';
 
 async function loginIfNeeded(){
 
@@ -30,8 +30,13 @@ async function loginIfNeeded(){
 export async function postTweet(text){
     await loginIfNeeded(scraper);
 
-    console.log(2, text);
     await scraper.sendTweet(text);
+}
+
+export async function replyToTweet(text, replyToTweetId){
+    await loginIfNeeded(scraper);
+
+    await scraper.sendTweet(text, replyToTweetId);
 }
 
 export async function postTweetWithImage(text, imageUrl){
@@ -67,8 +72,7 @@ export async function getLastMentions() {
     const minimumFollowersToReply = 800;
     await loginIfNeeded();
 
-    const lastMentions = await scraper.searchTweets(`@${username} -is:retweet -is:reply`, 50);
-
+    const lastMentions = await scraper.searchTweets(`@${username} -isretweet -isreply`, 20, SearchMode.Latest);
     const lastMentionsData = [];
     const usersToReplies = new Set();
     for await (const lastMention of lastMentions) {
@@ -81,6 +85,9 @@ export async function getLastMentions() {
         usersToReplies.add(user.username);
 
         if (user.followersCount < minimumFollowersToReply) continue;
+
+        const isFromToday = isTweetFromToday(lastMention);
+        if (!isFromToday) continue;
 
         lastMentionsData.push(lastMention);
     }
