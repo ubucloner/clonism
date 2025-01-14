@@ -6,7 +6,7 @@ import { downloadImage, isTweetFromToday } from "../utils.js";
 
 
 const scraper = new Scraper();
-const username = 'crypto_yohann';
+const username = 'FcktardAI';
 
 async function loginIfNeeded(){
 
