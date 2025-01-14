@@ -55,32 +55,32 @@ const actions = {
             makeAPicturePost(character, mood)
         }
     },
-    // postATrendPicture: {
-    //     probability: character.actionProbabilities.postATrendPicture,
-    //     callback: () => {
-    //         let mood = moods[Math.floor(Math.random() * moods.length)];
-    //         console.log(`I am ${mood}... let's make some art`);
-    //         makeATrendPicturePost(character, mood)
-    //     }
-    // },
-    // replyToMentions: {
-    //     probability: character.actionProbabilities.replyToMentions,
-    //     callback: () => {
-    //        let mood = moods[Math.floor(Math.random() * moods.length)];
-    //        console.log(`I am ${mood}... let's make some post`);
-    //        replyToMentions(character, mood)
-    //     }
-    // },
+    postATrendPicture: {
+        probability: character.actionProbabilities.postATrendPicture,
+        callback: () => {
+            let mood = moods[Math.floor(Math.random() * moods.length)];
+            console.log(`I am ${mood}... let's make some art`);
+            makeATrendPicturePost(character, mood)
+        }
+    },
+    replyToMentions: {
+        probability: character.actionProbabilities.replyToMentions,
+        callback: () => {
+           let mood = moods[Math.floor(Math.random() * moods.length)];
+           console.log(`I am ${mood}... let's make some post`);
+           replyToMentions(character, mood)
+        }
+    },
 };
 
 let actionPerMinute = character.actionPerMinute 
 let firstAction = actions.postATweet.callback
 wakeUp(actions, firstAction, actionPerMinute)
 
-// cron.schedule('0 0 * * 0', async() => {
-//     console.log("It's Sunday 00:00, time to create a poll!");
-//     await createPoll();
-// });
+cron.schedule('0 0 * * 0', async() => {
+    console.log("It's Sunday 00:00, time to create a poll!");
+    await createPoll();
+});
 
 // cron.schedule('0 0 * * 1', async() => {
 //     console.log("It's Monday 00:00, time to check poll results!");

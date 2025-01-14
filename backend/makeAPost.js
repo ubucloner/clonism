@@ -152,5 +152,5 @@ export async function replyToMentions(artist, tweet) {
 
 
     // temp
-    await closePoll();
+    // await closePoll();
 }
