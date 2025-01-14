@@ -19,7 +19,7 @@ async function loginIfNeeded(){
         process.env.X_LOGIN,
         process.env.X_PASSWORD,
         process.env.X_EMAIL_OR_PHONE,
-        undefined,
+        'WGpiOFYySkg3cUZZZTB5NEFtRDk6MTpjaQ',
         process.env.TWITTER_API_KEY,
         process.env.TWITTER_API_SECRET_KEY,
         process.env.TWITTER_ACCESS_TOKEN,
