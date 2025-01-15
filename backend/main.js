@@ -92,7 +92,10 @@ wakeUp(normalActions, firstAction, actionPerMinute, actionEveryMinutesNb);
 let replyActionPerMinute = character.replyActionPerMinute;
 let firstReplyAction = replyActions.replyToUsers.callback;
 const replyActionEveryMinutesNb = 900;
-wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEveryMinutesNb);
+
+setTimeout(() => {
+    wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEveryMinutesNb);
+}, 15 * 60 * 1000);
 
 // cron.schedule('0 0 * * 0', async() => {
 //     console.log("It's Sunday 00:00, time to create a poll!");
