@@ -77,10 +77,10 @@ let actionPerMinute = character.actionPerMinute
 let firstAction = actions.postATweet.callback
 wakeUp(actions, firstAction, actionPerMinute)
 
-cron.schedule('0 0 * * 0', async() => {
-    console.log("It's Sunday 00:00, time to create a poll!");
-    await createPoll();
-});
+// cron.schedule('0 0 * * 0', async() => {
+//     console.log("It's Sunday 00:00, time to create a poll!");
+//     await createPoll();
+// });
 
 // cron.schedule('0 0 * * 1', async() => {
 //     console.log("It's Monday 00:00, time to check poll results!");
