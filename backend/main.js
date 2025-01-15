@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost, replyToMentions } from "./makeAPost.js";
+import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost, replyToMentions, replyToUsers } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
 import { addMemory } from "./memory.js";
@@ -8,7 +8,7 @@ let character = loadCharacterFromJson("character.yaml")
 
 let newsRssUrl = character.newsRssUrl
 let moods = character.available_moods
-const actions = {
+const normalActions = {
     postATweet: {
         probability: character.actionProbabilities.postATweet,
         callback: () => {
@@ -63,19 +63,36 @@ const actions = {
             makeATrendPicturePost(character, mood)
         }
     },
+};
+
+const replyActions = {
     replyToMentions: {
-        probability: character.actionProbabilities.replyToMentions,
+        probability: character.replyActionProbabilities.replyToMentions,
         callback: () => {
            let mood = moods[Math.floor(Math.random() * moods.length)];
-           console.log(`I am ${mood}... let's make some post`);
+           console.log(`I am ${mood}... let's reply to a mention post`);
            replyToMentions(character, mood)
         }
     },
-};
+    replyToUsers: {
+        probability: character.replyActionProbabilities.replyToUsers,
+        callback: () => {
+           let mood = moods[Math.floor(Math.random() * moods.length)];
+           console.log(`I am ${mood}... let's reply to a user post`);
+           replyToUsers(character, mood)
+        }
+    }
+}
 
-let actionPerMinute = character.actionPerMinute 
-let firstAction = actions.postATweet.callback
-wakeUp(actions, firstAction, actionPerMinute)
+let actionPerMinute = character.actionPerMinute;
+let firstAction = normalActions.postATweet.callback;
+const actionEveryMinutesNb = 3600;
+wakeUp(normalActions, firstAction, actionPerMinute, actionEveryMinutesNb);
+
+let replyActionPerMinute = character.replyActionPerMinute;
+let firstReplyAction = replyActions.replyToUsers.callback;
+const replyActionEveryMinutesNb = 900;
+wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEveryMinutesNb);
 
 // cron.schedule('0 0 * * 0', async() => {
 //     console.log("It's Sunday 00:00, time to create a poll!");

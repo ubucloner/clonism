@@ -66,3 +66,9 @@ export function getBestMentionToReply(mentions) {
 
   return mentionsWithScore[0]?.mention;
 }
+
+export function getRandomElements(arr, count) {
+  return arr
+    .sort(() => Math.random() - 0.5)
+    .slice(0, count);
+}

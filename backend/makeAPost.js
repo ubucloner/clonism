@@ -2,7 +2,7 @@ import "./loadEnv.js"
 
 import { addMemory, getMemoryAsText } from "./memory.js";
 import { generateImage } from "./replicateAdapter.js"
-import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll, closePoll, replyToTweet } from "./twitter/twitterClientPoster.js";
+import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll, closePoll, getLastUsersPosts } from "./twitter/twitterClientPoster.js";
 import { completeText, produceJson } from "./llm/anthropicAdapter.js";
 import { getBestMentionToReply } from "./utils.js";
 
@@ -147,6 +147,28 @@ async function generateImagePrompt(characterPrompt, style_prompt, mood, topic){
     return JSON.parse(result)
 }
 
+export async function replyToTweet(artist, text, mood, conversationId) {
+    let {character} = artist
+    let prompt = `
+    pretend to be ${character}
+    your memory is ${getMemoryAsText()}
+        Your mood is: ${mood}
+    make a short tweet (less than 30 words) in answer to this tweet: "${text}"
+    Your tweet needs to be relevant to the tweet you are replying to, and needs to be very original and engaging.
+    Do not make any other comment just provide the tweet answer.
+    the tweet answer is:
+    `;
+    let tweetReply = await completeText(prompt)
+    
+    if (!tweetReply) return;
+
+    await postTweet(tweetReply, conversationId)
+    
+    let memory = `posted a reply to a tweet: ${tweetReply}`
+    console.log(memory)
+    addMemory(memory)
+}
+
 export async function replyToMentions(artist, mood) {
     const lastMentions = await getLastMentions();
     const {conversationId, text} = getBestMentionToReply(lastMentions);
@@ -155,21 +177,16 @@ export async function replyToMentions(artist, mood) {
         return await makeATextPost(artist, mood);
     }
 
-    let {character} = artist
-    let prompt = `
-    pretend to be ${character}
-    your memory is ${getMemoryAsText()}
-    make a short tweet (less than 30 words) in answer to this tweet: "${text}"
-    Your tweet needs to be relevant to the tweet you are replying to.
-    Do not make any other comment just provide the tweet answer
-    the tweet answer is:
-    `;
-    let tweetReply = await completeText(prompt)
-    
-    await replyToTweet(tweetReply, conversationId)
-    
-    let memory = `posted a reply to a tweet: ${tweetReply}`
-    console.log(memory)
-    addMemory(memory)
+    await replyToTweet(artist, text, mood, conversationId);
+}
+
+export async function replyToUsers(artist, mood) {
+    const usersPosts = await getLastUsersPosts();
+    for (const {conversationId, text} of usersPosts) {
+        if (!conversationId || !text) {
+            continue;
+        }
+        await replyToTweet(artist, text, mood, conversationId);
+    }
 }
 // await closePoll();

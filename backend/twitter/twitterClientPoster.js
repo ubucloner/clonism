@@ -2,7 +2,8 @@
 import fs from "fs"
 import { Scraper, SearchMode } from 'agent-twitter-client';
 import "../loadEnv.js"
-import { downloadImage, isTweetFromToday } from "../utils.js";
+import { downloadImage, getRandomElements, isTweetFromToday } from "../utils.js";
+import { twitterUsers } from "./users.js";
 
 
 const scraper = new Scraper();
@@ -27,13 +28,7 @@ async function loginIfNeeded(){
     );
 }
 
-export async function postTweet(text){
-    await loginIfNeeded(scraper);
-
-    await scraper.sendTweet(text);
-}
-
-export async function replyToTweet(text, replyToTweetId){
+export async function postTweet(text, replyToTweetId = null){
     await loginIfNeeded(scraper);
 
     await scraper.sendTweet(text, replyToTweetId);
@@ -69,7 +64,7 @@ export async function getRandomTrendAndBestTweets() {
 }
 
 export async function getLastMentions() {
-    const minimumFollowersToReply = 800;
+    const minimumFollowersToReply = 100;
     await loginIfNeeded();
 
     const lastMentions = await scraper.searchTweets(`@${username} -isretweet -isreply`, 20, SearchMode.Latest);
@@ -93,6 +88,25 @@ export async function getLastMentions() {
     }
 
     return lastMentionsData;
+}
+
+export async function getLastUsersPosts() {
+    await loginIfNeeded();
+    const lastUsersPosts = [];
+
+    const randomUsersToReply = getRandomElements(twitterUsers, 15);
+    for (const user of randomUsersToReply) {
+        const lastUsersPostsData = await scraper.searchTweets(`from:${user} -isretweet -isreply`, 1, SearchMode.Latest);
+
+        for await (const lastUserPost of lastUsersPostsData) {
+            const isFromToday = isTweetFromToday(lastUserPost);
+            if (!isFromToday) continue;
+
+            lastUsersPosts.push(lastUserPost);
+        }
+    }
+
+    return lastUsersPosts;
 }
 
 export async function createPoll() {

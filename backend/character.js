@@ -6,9 +6,9 @@ import { consolidateMemory } from "./memory.js";
 
 let interval = null
 
-export function wakeUp(actions, firstAction, actionPerminutes){
+export function wakeUp(actions, firstAction, actionPerminutes, everyMinutesNb){
    
-    interval = scheduleJob(actionPerminutes, () => {
+    interval = scheduleJob(actionPerminutes, everyMinutesNb, () => {
         let action = sampleAction(actions)
         action()
     })   
