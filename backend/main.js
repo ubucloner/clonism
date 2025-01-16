@@ -86,15 +86,15 @@ const replyActions = {
 
 let actionPerMinute = character.actionPerMinute;
 let firstAction = normalActions.postATweet.callback;
-const actionEveryMinutesNb = 3600;
-wakeUp(normalActions, firstAction, actionPerMinute, actionEveryMinutesNb);
+const actionEverySecondsNb = 3600;
+wakeUp(normalActions, firstAction, actionPerMinute, actionEverySecondsNb);
 
 // let replyActionPerMinute = character.replyActionPerMinute;
 // let firstReplyAction = replyActions.replyToUsers.callback;
-// const replyActionEveryMinutesNb = 900;
+// const replyActionEverySecondsNb = 900;
 
 // setTimeout(() => {
-//     wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEveryMinutesNb);
+//     wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEverySecondsNb);
 // }, 15 * 60 * 1000);
 
 // cron.schedule('0 0 * * 0', async() => {

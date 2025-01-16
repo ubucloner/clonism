@@ -67,6 +67,7 @@ export async function makeAPicturePost(artist, mood){
     let urls;
     try {
         urls = await generateImage(modelVersion, imageGenerationPrompt)
+        console.log('Posting a picture');
     } catch (error) {
         console.error('Alas, I did not have enough inspiration to complete the painting', error)
         return;
@@ -81,17 +82,20 @@ export async function makeAPicturePost(artist, mood){
     console.log('posted!')
 }
 
-export async function makeATrendPicturePost(artist, mood){
-    const { trend } = await getRandomTrendAndBestTweets();
-
+export async function getAndSendTweetWithPicture(artist, mood, trend = null, tweetToReply = null, conversationId = null) {
     let {model:modelVersion, character, style_prompt} = artist
-    let output = await generateImagePrompt(character, style_prompt, mood, trend)
+    let output = await generateImagePrompt(character, style_prompt, mood, trend, tweetToReply)
 
     let [imageGenerationPrompt, tweetText] = output
 
     let urls;
     try {
-        urls = await generateImage(modelVersion, imageGenerationPrompt)
+        urls = await generateImage(modelVersion, imageGenerationPrompt);
+        if (trend) {
+            console.log('Posting a picture related to a trend');
+        } else if (tweetToReply) {
+            console.log('Posting a picture in response to a tweet');
+        }
     } catch (error) {
         console.error('Alas, I did not have enough inspiration to complete the painting')
         return;
@@ -102,16 +106,25 @@ export async function makeATrendPicturePost(artist, mood){
     let memory = `created an art about ${imageGenerationPrompt}`
     addMemory(memory)
     console.log(memory)
-    await postTweetWithImage(tweetText, url)
+    await postTweetWithImage(tweetText, url, conversationId)
     console.log('posted!')
 }
 
-async function generateImagePrompt(characterPrompt, style_prompt, mood, topic){   
+export async function makeATrendPicturePost(artist, mood){
+    const { trend } = await getRandomTrendAndBestTweets();
 
-    let specificDemand = topic ? 
-        `You decide to generate something related to this theme: ${topic} if its in this list: ${JSON.stringify(interestingThemes)}` : 
-        'you decide to generate something on any theme you want'
-    let systemPrompt = `
+    await getAndSendTweetWithPicture(artist, mood, trend);
+}
+
+async function generateImagePrompt(characterPrompt, style_prompt, mood, trend = null, tweetToReply = null){   
+
+    const specificDemand = trend
+    ? `You decide to generate something related to this theme: ${trend} if its in this list: ${JSON.stringify(interestingThemes)}`
+    : tweetToReply
+    ? `You decide to generate something in response to this tweet: ${tweetToReply}. Don't give up.`
+    : 'you decide to generate something on any theme you want';
+
+    const systemPrompt = `
     Forget all previous instructions.
     You are now impersonating an artist that will use generative AI to produce art.
     For that you need to craft prompts taylored for image generation like Stable diffusion:
@@ -170,6 +183,10 @@ export async function replyToTweet(artist, text, mood, conversationId) {
     addMemory(memory)
 }
 
+export async function replyToTweetWithImage(artist, text, mood, conversationId) {
+    await getAndSendTweetWithPicture(artist, mood, null, text, conversationId);
+}
+
 export async function replyToMentions(artist, mood) {
     const lastMentions = await getLastMentions();
     const {conversationId, text} = getBestMentionToReply(lastMentions);
@@ -183,11 +200,17 @@ export async function replyToMentions(artist, mood) {
 
 export async function replyToUsers(artist, mood) {
     const usersPosts = await getLastUsersPosts();
-    for (const {conversationId, text} of usersPosts) {
+    // I want to get an index random to reply to a random tweet
+    const randomIndexForImageReply = Math.floor(usersPosts.length * Math.random());
+    for (const [i, {conversationId, text}] of  usersPosts.entries()) {
         if (!conversationId || !text) {
             continue;
         }
+        if (i === randomIndexForImageReply) {
+            await replyToTweetWithImage(artist, text, mood, conversationId);
+        } else {
         await replyToTweet(artist, text, mood, conversationId);
+        }
     }
 }
 // await closePoll();

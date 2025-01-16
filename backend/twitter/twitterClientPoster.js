@@ -34,7 +34,7 @@ export async function postTweet(text, replyToTweetId = null){
     await scraper.sendTweet(text, replyToTweetId);
 }
 
-export async function postTweetWithImage(text, imageUrl){
+export async function postTweetWithImage(text, imageUrl, conversationId = null){
     await loginIfNeeded();
 
     let localFilePath = await downloadImage(imageUrl)
@@ -46,7 +46,7 @@ export async function postTweetWithImage(text, imageUrl){
         }
     ]
 
-    await scraper.sendTweet(text, null, mediaData);
+    await scraper.sendTweet(text, conversationId, mediaData);
 }
 
 export async function getRandomTrendAndBestTweets() {
@@ -64,7 +64,6 @@ export async function getRandomTrendAndBestTweets() {
 }
 
 export async function getLastMentions() {
-    const minimumFollowersToReply = 100;
     await loginIfNeeded();
 
     const lastMentions = await scraper.searchTweets(`@${username} -isretweet -isreply`, 20, SearchMode.Latest);
@@ -78,8 +77,6 @@ export async function getLastMentions() {
         
         const user = await scraper.getProfile(lastMention.username);
         usersToReplies.add(user.username);
-
-        if (user.followersCount < minimumFollowersToReply) continue;
 
         const isFromToday = isTweetFromToday(lastMention);
         if (!isFromToday) continue;
