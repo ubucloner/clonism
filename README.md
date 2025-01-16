@@ -65,4 +65,4 @@ Because creativity now belongs to autonomous systems. Clonism is not just a tool
 
 ## license
 
-AGPL-v3
+MIT
