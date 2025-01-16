@@ -4,7 +4,7 @@ import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
 import { addMemory } from "./memory.js";
 
-let character = loadCharacterFromJson("character.yaml")
+let character = loadCharacterFromJson("character.new.yaml")
 
 let newsRssUrl = character.newsRssUrl
 let moods = character.available_moods
@@ -84,25 +84,38 @@ const replyActions = {
     }
 }
 
-let actionPerMinute = character.actionPerMinute;
-let firstAction = normalActions.postATweet.callback;
-const actionEverySecondsNb = 3600;
-wakeUp(normalActions, firstAction, actionPerMinute, actionEverySecondsNb);
 
-// let replyActionPerMinute = character.replyActionPerMinute;
-// let firstReplyAction = replyActions.replyToUsers.callback;
-// const replyActionEverySecondsNb = 900;
 
-// setTimeout(() => {
-//     wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEverySecondsNb);
-// }, 15 * 60 * 1000);
+const launchPost = () => {
+    const actionPerMinute = character.actionPerMinute;
+    let firstAction = normalActions.postATweet.callback;
+    const actionEverySecondsNb = 3600;
+    wakeUp(normalActions, firstAction, actionPerMinute, actionEverySecondsNb);
+};
 
-// cron.schedule('0 0 * * 0', async() => {
-//     console.log("It's Sunday 00:00, time to create a poll!");
-//     await createPoll();
-// });
+const launchReply = () => {
+    const replyActionPerMinute = character.replyActionPerMinute;
+    let firstReplyAction = replyActions.replyToUsers.callback;
+    const replyActionEverySecondsNb = 900;
+    
+    setTimeout(() => {
+        wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEverySecondsNb);
+    }, 15 * 60 * 1000);
+}
 
-// cron.schedule('0 0 * * 1', async() => {
-//     console.log("It's Monday 00:00, time to check poll results!");
-//     await closePoll();
-// });
+cron.schedule('0 0 * * 0', async() => {
+    console.log("It's Sunday 00:00, time to create a poll!");
+    await createPoll();
+});
+
+cron.schedule('0 0 * * 1', async() => {
+    console.log("It's Monday 00:00, time to check poll results!");
+    await closePoll();
+});
+
+const start = () => {
+    launchPost();
+    // launchReply();
+};
+
+start();
