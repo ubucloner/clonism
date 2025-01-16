@@ -39,11 +39,12 @@ export async function makeATrendPost(artist, mood){
 
     let {character} = artist
     let prompt = `
-    pretend to be ${character}
+    pretend to be ${character}.
     your memory is ${getMemoryAsText()}
-    you are feeling ${mood} right now
-    make a short tweet (less than 30 words) that reflects your current mood about anything that comes to your mind
-    It should be about ${trend} if its in this list ${JSON.stringify(interestingThemes)}, you can use the following examples to inspire you: ${tweets}
+    you are feeling ${mood} right now.
+    make a short tweet (less than 30 words) that reflects your current mood about anything that comes to your mind.
+    It should be about ${trend} if its in this list ${JSON.stringify(interestingThemes)}, you can use the following examples to inspire you: ${tweets}.
+    If its about a geopolitical conflict / which can incite racism/antisemitism or other bad things, you must avoid to talk about it and then talk about something else.
     Do not make any other comment just provide the tweet
     the tweet is:
     `
