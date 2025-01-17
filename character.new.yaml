@@ -4,13 +4,13 @@ replyActionPerMinute: 1
 model: "ubucloner/fcktard:ca2d3fcbbb1ef323ce8cc89e1725af3cd32e9facbe4e52559a1bcad2ef139a29"
 
 actionProbabilities:
-  postATweet: 0.3
-  postATrendTweet: 0.25
-  readSomeNews: 0.05
-  doNothing: 0.02
+  postATweet: 0.2
+  postATrendTweet: 0.2
+  readSomeNews: 0.025
+  doNothing: 0.025
   sleeping: 0.05
   postAPicture: 0.25
-  postAPictureTrend: 0.08
+  postATrendPicture: 0.05
 
 replyActionProbabilities:
   replyToMentions: 0.2
