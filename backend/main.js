@@ -4,7 +4,7 @@ import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
 import { addMemory } from "./memory.js";
 
-let character = loadCharacterFromJson("character.new.yaml")
+let character = loadCharacterFromJson("character.yaml")
 
 let newsRssUrl = character.newsRssUrl
 let moods = character.available_moods
