@@ -192,7 +192,7 @@ export async function replyToMentions(artist, mood) {
     const {conversationId, text} = getBestMentionToReply(lastMentions);
 
     if (!conversationId || !text) {
-        return await makeATextPost(artist, mood);
+        return await replyToUsers(artist, mood);
     }
 
     await replyToTweet(artist, text, mood, conversationId);
