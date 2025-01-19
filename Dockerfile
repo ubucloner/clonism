@@ -1,22 +1,20 @@
-# Use an official Node.js runtime as the base image
-FROM node:23
+# Use Node.js 20.18.1 as the base image
+FROM node:20.18.1
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+# Set the working directory
+WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install only production dependencies
+RUN npm install --omit=dev
 
-RUN npx playwright install
-# Copy the backend and dist directories
-COPY backend ./backend
-COPY dist ./dist
+# Copy the rest of the application files
+COPY . .
 
-# Expose the port the app runs on
+# Expose the port your Express server uses
 EXPOSE 3000
 
-# Command to run the application
-CMD ["node", "backend/app.js"]
+# Start the server
+CMD ["node", "backend/main.js"]

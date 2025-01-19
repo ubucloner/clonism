@@ -27,5 +27,3 @@ dist-ssr
 
 var/*
 !var/.gitkeep
-backend/privateImages/*
-!backend/privateImages/.gitkeep
