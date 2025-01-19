@@ -7,7 +7,7 @@ import { twitterUsers } from "./users.js";
 
 
 const scraper = new Scraper();
-const username = 'FcktardAI';
+const username = process.env.X_LOGIN;
 
 async function loginIfNeeded(){
 

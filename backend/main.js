@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost, replyToMentions, replyToUsers } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
-import { addMemory, loadMemoryFromJson } from "./memory.js";
+import { addMemory } from "./memory.js";
 
 let character = loadCharacterFromJson("character.yaml")
 
