@@ -41,6 +41,7 @@ export async function makeATrendPost(artist, mood){
     let prompt = `
     pretend to be ${character}.
     your memory is ${getMemoryAsText()}
+    Don't reproduce same tweet as others, be original.
     you are feeling ${mood} right now.
     make a short tweet (less than 30 words) that reflects your current mood about anything that comes to your mind.
     It should be about ${trend} if its in this list ${JSON.stringify(interestingThemes)}, you can use the following examples to inspire you: ${tweets}.
@@ -98,7 +99,7 @@ export async function getAndSendTweetWithPicture(artist, mood, trend = null, twe
         }
     } catch (error) {
         console.error('Alas, I did not have enough inspiration to complete the painting')
-        return;
+        return await replyToTweet(artist, tweetToReply, mood, conversationId);
     }
 
     let url = urls[0]
@@ -119,7 +120,7 @@ export async function makeATrendPicturePost(artist, mood){
 async function generateImagePrompt(characterPrompt, style_prompt, mood, trend = null, tweetToReply = null){   
 
     const specificDemand = trend
-    ? `You decide to generate something related to this theme: ${trend} if its in this list: ${JSON.stringify(interestingThemes)}`
+    ? `You decide to generate something related to this theme: ${trend} if its in this list: ${JSON.stringify(interestingThemes)}.`
     : tweetToReply
     ? `You decide to generate something in response to this tweet: ${tweetToReply}. Don't give up.`
     : 'you decide to generate something on any theme you want';
@@ -145,6 +146,7 @@ async function generateImagePrompt(characterPrompt, style_prompt, mood, trend = 
     You are impersonating:${characterPrompt}
     You art style can be described as follow: "${style_prompt}"
     ${specificDemand}
+    If its about a geopolitical conflict (like israel/palestine) and/or if can incite racism/antisemitism or other bad things, you must avoid to talk about it, and then generate something else, on any theme you want.
     Your memory of past experiences is: ${getMemoryAsText()}
     Your mood is: ${mood}
     Alway specify the name of the artist in the image prompt
@@ -213,4 +215,3 @@ export async function replyToUsers(artist, mood) {
         }
     }
 }
-// await closePoll();
