@@ -1,4 +1,4 @@
-import cron from 'node-cron';
+
 import { makeAPicturePost, makeATextPost, makeATrendPicturePost, makeATrendPost, replyToMentions, replyToUsers } from "./makeAPost.js";
 import { loadCharacterFromJson, sleep, wakeUp } from "./character.js";
 import { readRandomNews } from "./newsFeedReader.js";
@@ -103,15 +103,7 @@ const launchReply = () => {
     }, 35 * 60 * 1000);
 }
 
-// cron.schedule('0 0 * * 0', async() => {
-//     console.log("It's Sunday 00:00, time to create a poll!");
-//     await createPoll();
-// });
 
-// cron.schedule('0 0 * * 1', async() => {
-//     console.log("It's Monday 00:00, time to check poll results!");
-//     await closePoll();
-// });
 
 const start = () => {
     if (process.env.POST_FEATURE === "true") {

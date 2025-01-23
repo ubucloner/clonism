@@ -2,16 +2,10 @@ import "./loadEnv.js"
 
 import { addMemory, getMemoryAsText } from "./memory.js";
 import { generateImage } from "./replicateAdapter.js"
-import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, createPoll, closePoll, getLastUsersPosts } from "./twitter/twitterClientPoster.js";
+import { postTweet, postTweetWithImage, getRandomTrendAndBestTweets, getLastMentions, getLastUsersPosts } from "./twitter/twitterClientPoster.js";
 import { completeText, produceJson } from "./llm/anthropicAdapter.js";
 import { getBestMentionToReply } from "./utils.js";
 
-const interestingThemes = [{
-    nftCollections: ['BoredApeYachtClub', 'CryptoPunks', 'Azuki', 'Moonbirds', 'MutantApeYachtClub', 'Doodles', 'WorldOfWomen', 'PudgyPenguins', 'ArtBlocks', 'Rarible', 'CoolCats', 'VeeFriends', 'Meebits', 'InvisibleFriends', 'Goblintown', 'Mfer', 'ChromieSquiggle', 'Otherdeed', 'Loot', 'CyberKongz', 'Hashmasks', 'FlufWorld', 'TheSandbox', 'Decentraland', 'AxieInfinity', 'RugRadio', 'DeadFellaz', 'KumoX', 'KanpaiPandas'],
-    techInfluenceurs: ['Elon Musk', 'Vitalik Buterin', 'Jack Dorsey', 'Sundar Pichai', 'Tim Cook', 'Satya Nadella', 'Mark Zuckerberg', 'Sam Altman', 'Chamath Palihapitiya', 'Naval Ravikant', 'Marc Andreessen', 'Balaji Srinivasan', 'Changpeng Zhao', 'Brian Armstrong', 'Jensen Huang', 'Andrew Ng', 'Dmitry Buterin', 'Gavin Wood', 'Jony Ive', 'Linus Torvalds', 'Sergey Brin', 'Larry Page', 'Peter Thiel', 'Reid Hoffman', 'Adam Neumann', 'Palmer Luckey', 'Charlie Lee', 'Chris Dixon', 'Kimbal Musk', 'Dan Held'],
-    presidents: ['Barack Obama', 'Donald Trump', 'Joe Biden', 'John F. Kennedy', 'Abraham Lincoln', 'George Washington', 'Franklin D. Roosevelt', 'Ronald Reagan', 'Bill Clinton', 'Theodore Roosevelt', 'Thomas Jefferson', 'Dwight D. Eisenhower', 'Andrew Jackson', 'Woodrow Wilson', 'James Madison', 'Harry S. Truman', 'John Adams', 'George H. W. Bush', 'James Monroe', 'Lyndon B. Johnson', 'Jimmy Carter', 'Calvin Coolidge', 'Ulysses S. Grant', 'Grover Cleveland', 'Chester A. Arthur', 'Richard Nixon', 'Benjamin Harrison', 'Martin Van Buren', 'William McKinley', 'Herbert Hoover'],
-    buzzWords: ['Meme', 'Moon', 'Pump', 'Drama', 'NGMI', 'WGMI', 'Rugpull', 'FUD', 'Airdrop', 'Gas', 'Degen', 'NFT', 'Ordinals', 'Staking', 'Flippening', 'Bullbear', 'Scam', 'Layer2', 'Multichain', 'GameFi', 'PFP', 'Mint', 'Royalties', 'FreeMint', 'RealYield', 'Rollups', 'MEV', 'Sniping', 'Telegram', 'Bots', 'MemeArt', 'Onchain', 'Exploits', 'Privacy', 'ZKProofs', 'Modular', 'Bridges', 'AI', 'Storage', 'Abstraction', 'Soulbound', 'Gaming', 'Land', 'Economy', 'FreetoOwn', 'Merch', 'Tattoos', 'Ponzi', 'Cult', 'Crashes', 'ETH', 'SOL', 'Bitcoin', 'CBDC', 'Governance', 'Polls', 'Spaces', 'X-Engagement', 'Elon', 'Adoption', 'Utility', 'Bots', 'Lambo', 'Engage2Earn', 'SniperBots', 'Shitpost', 'Vibes', 'Alpha', 'Lowcap', 'Presale', 'Farming', 'Yield', 'Options', 'DEX', 'Bullish', 'Bearish', 'NFTs', 'FreeNFT', 'Treasury', 'Tokenomics', 'Ecosystem', 'ChainWars', 'SocialFi', 'Community', 'TwitterRaids', 'WhaleTracking', '100x', 'Giveaway', 'ETHKillers', 'SpacesHost', 'BUIDL', 'Doxxed', 'Undervalued', 'Scarcity', 'AirdropSeason', 'CEX', 'DEXAggregator', 'HODL', 'Ponzinomics']
-}];
 
 export async function makeATextPost(artist, mood){
     let {character} = artist
@@ -44,7 +38,7 @@ export async function makeATrendPost(artist, mood){
     Don't reproduce same tweet as others, be original.
     you are feeling ${mood} right now.
     make a short tweet (less than 30 words) that reflects your current mood about anything that comes to your mind.
-    It should be about ${trend} if its in this list ${JSON.stringify(interestingThemes)}, you can use the following examples to inspire you: ${tweets}.
+    It should be about ${trend} if its in this list ${JSON.stringify(artist.interests)}, you can use the following examples to inspire you: ${tweets}.
     If its about a geopolitical conflict / which can incite racism/antisemitism or other bad things, you must avoid to talk about it and then talk about something else.
     Do not make any other comment just provide the tweet
     the tweet is:
