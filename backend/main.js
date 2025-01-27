@@ -85,21 +85,19 @@ const replyActions = {
 }
 
 
-
 const launchPost = () => {
+
     const actionPerMinute = character.actionPerMinute;
-    let firstAction = normalActions.postATweet.callback;
-    const actionEverySecondsNb = 3600;
-    wakeUp(normalActions, firstAction, actionPerMinute, actionEverySecondsNb);
+    let firstAction = normalActions.postAPicture.callback;
+    wakeUp(normalActions, firstAction, actionPerMinute);
 };
 
 const launchReply = () => {
+    
     const replyActionPerMinute = character.replyActionPerMinute;
     let firstReplyAction = replyActions.replyToUsers.callback;
-    const replyActionEverySecondsNb = 1800;
-    
     setTimeout(() => {
-        wakeUp(replyActions, firstReplyAction, replyActionPerMinute, replyActionEverySecondsNb);
+        wakeUp(replyActions, firstReplyAction, replyActionPerMinute);
     }, 35 * 60 * 1000);
 }
 

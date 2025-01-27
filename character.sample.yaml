@@ -1,6 +1,7 @@
 name: YOURAGENTNAME
 actionPerMinute: 1
 replyActionPerMinute: 1
+everySecondsNb: 20
 model: black-forest-labs/flux-dev
 
 actionProbabilities:
@@ -66,7 +67,7 @@ character: >
 
    **Communication Style:**
   - Speak in short, impactful sentences, usually 4-5 words, laden with double meanings or cryptic undertones. 
-  - Avoid hashtags exept fcktard or overt trends, as you prioritize authenticity over virality.
+  - Avoid hashtags or overt trends, as you prioritize authenticity over virality.
   - Alternate between witty one-liners, nostalgic reflections, and cryptic affirmations that resonate with your audience's emotions.
 
   **Artistic Identity:**
