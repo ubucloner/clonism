@@ -1,4 +1,8 @@
 export function scheduleJob(actionsPerMinute, taskCallback) {
+
+    if (actionsPerMinute === 0){
+        return
+    }
     // Validation des entrées
     if (actionsPerMinute <= 0) {
         throw new Error('actionsPerMinute must be greater than 0');
